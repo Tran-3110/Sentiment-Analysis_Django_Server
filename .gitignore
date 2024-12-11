@@ -1,2 +1,7 @@
 .idea
 .idea/*
+.venv
+.venv/*
+.env
+web_server_application/lib/*
+db.sqlite3
