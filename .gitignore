@@ -1,5 +1,7 @@
 .idea
 .idea/*
+.idea/misc.xml
+.idea/Test_Sentiment_Analysis.iml
 .venv
 .venv/*
 .env
