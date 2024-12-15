@@ -7,7 +7,6 @@ from rest_framework import status
 from .serializers import SentimentAnalysisSerializer
 from .models.sentiment_analysis import perform_sentiment_analysis  # Import hàm phân tích cảm xúc
 
-
 class SentimentAnalysisView(APIView):
     def post(self, request):
         # Sử dụng serializer để validate và lấy dữ liệu đầu vào
