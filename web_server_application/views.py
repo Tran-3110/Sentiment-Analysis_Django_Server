@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import SentimentAnalysisSerializer
-from .models.sentiment_analysis import perform_sentiment_analysis  # Import hàm phân tích cảm xúc
+from .models.sentiment_analysis import SentimentAnalysis  # Import hàm phân tích cảm xúc
 
 class SentimentAnalysisView(APIView):
     def post(self, request):
@@ -15,7 +15,7 @@ class SentimentAnalysisView(APIView):
         if serializer.is_valid():
             # Lấy câu văn từ request
             input_data = serializer.validated_data
-            result = perform_sentiment_analysis(input_data)
+            result = SentimentAnalysis().perform_sentiment_analysis(input_data)
 
             # Trả về kết quả phân tích cảm xúc
             return Response(result, status=status.HTTP_200_OK)
