@@ -49,9 +49,9 @@ class SentimentAnalysis(metaclass=Singleton):
 
     def perform_sentiment_analysis(self, input_data):
         # Nếu không có sentence
-        if input_data['sentence'] is None: return None
+        if input_data['sentence'] is 'None': return None
         # Nếu đã có sentiment và sentence (Không cần thực hiện nữa)
-        if input_data['sentiment'] is not None and input_data['sentence'] is not None: return input_data
+        if input_data['sentiment'] != 'None' and input_data['sentence'] != 'None': return input_data
         pre_process_sentence = self.__pre_processing_data(input_data['sentence'])
         return self.__perform_model(pre_process_sentence)
 
@@ -77,20 +77,20 @@ def rating_sentiment(sentiment_result, delta=0.15):
     # return max(sentiment_rating, key=lambda x: x['rate'])['label']
 
 # Test model
-if __name__ == '__main__':
-    examples = [
-        {'sentiment': None, 'sentence': 'Nhà này cũng đẹp nhưng tôi không thích nó lắm'},
-        {'sentiment': 'NEG', 'sentence': 'Chỗ này thật rác rưởi'},
-        {'sentiment': None, 'sentence': 'Dịch vụ xung quanh rất ổn và tôi cực kì thích nó'},
-        {'sentiment': 'POS', 'sentence': 'Nhà này cũng đẹp nhưng tôi không thích nó lắm'},
-        {'sentiment': None, 'sentence': 'Bữa sáng hơi dở nhưng chất lượng phòng xịn lắm'},
-        {'sentiment': None, 'sentence': 'Netflix hết hạn sử dụng nên tôi không thể xem phim được'},
-    ]
-    sentiment_analysis = SentimentAnalysis()
-    for example in examples:
-        result = sentiment_analysis.perform_sentiment_analysis(example)
-        print(result)
-        print("\n")
+# if __name__ == '__main__':
+#     examples = [
+#         {'sentiment': None, 'sentence': 'Nhà này cũng đẹp nhưng tôi không thích nó lắm'},
+#         {'sentiment': 'NEG', 'sentence': 'Chỗ này thật rác rưởi'},
+#         {'sentiment': None, 'sentence': 'Dịch vụ xung quanh rất ổn và tôi cực kì thích nó'},
+#         {'sentiment': 'POS', 'sentence': 'Nhà này cũng đẹp nhưng tôi không thích nó lắm'},
+#         {'sentiment': None, 'sentence': 'Bữa sáng hơi dở nhưng chất lượng phòng xịn lắm'},
+#         {'sentiment': None, 'sentence': 'Netflix hết hạn sử dụng nên tôi không thể xem phim được'},
+#     ]
+#     sentiment_analysis = SentimentAnalysis()
+#     for example in examples:
+#         result = sentiment_analysis.perform_sentiment_analysis(example)
+#         print(result.keys())
+#         # print("\n")
 
 # def pre_processing_data(sentence):
 #     # Load VnCoreNLP
