@@ -26,7 +26,7 @@ class SentimentAnalysis(metaclass=Singleton):
         # Join các từ trong list để merge lại
         return ''.join([word for word in output])
 
-    def __perform_model(self, sentence):
+    def __perform_model(self, input_data):
         # Tải model
         # Khai báo option cache_dir dùng để lưu model vào thư mục chỉ định (Nặng 500mb 🥲😃). Nếu không thì sẽ lưu vào cache
         # model = RobertaForSequenceClassification.from_pretrained("wonrax/phobert-base-vietnamese-sentiment", cache_dir='model/model_sa_phobert')
@@ -35,6 +35,8 @@ class SentimentAnalysis(metaclass=Singleton):
         # Tải tokenizer (Xem BERT)
         # tokenizer = AutoTokenizer.from_pretrained("wonrax/phobert-base-vietnamese-sentiment", use_fast=False)
 
+        #Tiền xử lý
+        sentence = self.__pre_processing_data(input_data['sentence'])
         # Tokenize sentence và chuyển thành tensor
         input_ids = torch.tensor([self.tokenizer.encode(sentence)])
 
@@ -45,15 +47,14 @@ class SentimentAnalysis(metaclass=Singleton):
             sentiment_result = out.logits.softmax(dim=-1).tolist()
             print(sentiment_result)
             processed_label = rating_sentiment(sentiment_result)
-            return {'label': processed_label, 'sentence': sentence}
+            return {'label': processed_label, 'sentence': input_data['sentence']}
 
     def perform_sentiment_analysis(self, input_data):
         # Nếu không có sentence
         if input_data['sentence'] is 'None': return None
         # Nếu đã có sentiment và sentence (Không cần thực hiện nữa)
         if input_data['sentiment'] != 'None' and input_data['sentence'] != 'None': return input_data
-        pre_process_sentence = self.__pre_processing_data(input_data['sentence'])
-        return self.__perform_model(pre_process_sentence)
+        return self.__perform_model(input_data)
 
 
 def rating_sentiment(sentiment_result, delta=0.15):
