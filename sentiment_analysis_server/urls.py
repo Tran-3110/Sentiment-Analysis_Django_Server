@@ -16,10 +16,10 @@ Including another URLconf
 """
 from django.urls import path
 from django.contrib import admin
-from web_server_application.views import SentimentAnalysisView
+from web_server_application.views import ReviewValidate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('sentiment-analysis/', SentimentAnalysisView.as_view(), name="sentiment-analysis"),
+    path('review-validate/', ReviewValidate.as_view(), name="sentiment-analysis"),
 
 ]
