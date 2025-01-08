@@ -16,10 +16,11 @@ def api_process(input_data):
         'content': None
     }
 
-def perform_spam_filter(message, delta=0.15):
+def perform_spam_filter(message, delta=0):
     result = model.predict_proba([message])[0]
-    if abs(result[0] - result[1]) <= delta:
-        return True  # Nếu chênh lệch quá bé thì cho là không phải spam
+    print(result)
+    if abs(result[0] - result[1]) == delta: #Delta = 0 vì trọng số lúc này là bằng nhau
+        return False  # Nếu chênh lệch quá bé thì cho là spam
     else:
         return result[0] > result[1]  # True khi không spam, False khi spam
 
