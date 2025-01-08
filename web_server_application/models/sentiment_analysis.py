@@ -29,8 +29,6 @@ class SentimentAnalysis(metaclass=Singleton):
     def __perform_model(self, input_data):
         # Tải model
         # Khai báo option cache_dir dùng để lưu model vào thư mục chỉ định (Nặng 500mb 🥲😃). Nếu không thì sẽ lưu vào cache
-        # model = RobertaForSequenceClassification.from_pretrained("wonrax/phobert-base-vietnamese-sentiment", cache_dir='model/model_sa_phobert')
-        # model = RobertaForSequenceClassification.from_pretrained("wonrax/phobert-base-vietnamese-sentiment")
 
         # Tải tokenizer (Xem BERT)
         # tokenizer = AutoTokenizer.from_pretrained("wonrax/phobert-base-vietnamese-sentiment", use_fast=False)
@@ -43,7 +41,7 @@ class SentimentAnalysis(metaclass=Singleton):
         # Tiến hành triển khai model với input
         with torch.no_grad():
             out = self.model(input_ids)
-            # Tính softmax để phân loại và in kết quả có dạng [[NEG, POS, NEU]]
+            # Tính softmax để phân loại và in kết quả có dạng [[negative, positive, neutral]]
             sentiment_result = out.logits.softmax(dim=-1).tolist()
             print(sentiment_result)
             processed_label = rating_sentiment(sentiment_result)
@@ -59,7 +57,7 @@ class SentimentAnalysis(metaclass=Singleton):
 
 def rating_sentiment(sentiment_result, delta=0.15):
     sentiment_output = sentiment_result[0]
-    label = ['NEG', 'POS', 'NEU']
+    label = ['negative', 'positive', 'neutral']
 
     # Gán nhãn với từng tỉ lệ xuất hiện của từng loại cảm xúc
     sentiment_rating = [{'label': x, 'rate': sentiment_output[label.index(x)] / sum(sentiment_output)} for x in label]
@@ -69,9 +67,9 @@ def rating_sentiment(sentiment_result, delta=0.15):
     mid_rating = sentiment_rating[1]
 
     if abs(max_rating['rate'] - mid_rating['rate']) > delta:
-        return 'NEU' if max_rating['label'] == 'NEU' else max_rating['label']
+        return 'neutral' if max_rating['label'] == 'neutral' else max_rating['label']
     else:
-        if max_rating['label'] != 'NEU' and mid_rating['label'] != 'NEU':
-            return 'NEU'
+        if max_rating['label'] != 'neutral' and mid_rating['label'] != 'neutral':
+            return 'neutral'
         else:
             return max_rating['label']

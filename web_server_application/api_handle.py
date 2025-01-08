@@ -1,9 +1,11 @@
+import os
 import pickle
 
 from web_server_application.models.sentiment_analysis import SentimentAnalysis
 
-with open('web_server_application/lib/models/spamfilter_model.pkl', 'rb') as f:
+with open(os.getenv('SPAM_FILTER_PATH'), 'rb') as f:
     model = pickle.load(f)
+
 
 def api_process(input_data):
     if perform_spam_filter(input_data['sentence']):
@@ -11,15 +13,18 @@ def api_process(input_data):
             'result': True,
             'content': perform_sentiment_analysis(input_data)
         }
-    else: return {
-        'result': False,
-        'content': None
-    }
+    else:
+        return {
+            'result': False,
+            'content': None
+        }
 
-def perform_spam_filter(message, delta=0.15):
+
+def perform_spam_filter(message, delta=0):
     result = model.predict_proba([message])[0]
-    if abs(result[0] - result[1]) <= delta:
-        return True  # Nếu chênh lệch quá bé thì cho là không phải spam
+    print(result)
+    if abs(result[0] - result[1]) == delta:  # Delta = 0 vì trọng số lúc này là bằng nhau
+        return False  # Nếu chênh lệch quá bé thì cho là spam
     else:
         return result[0] > result[1]  # True khi không spam, False khi spam
 
