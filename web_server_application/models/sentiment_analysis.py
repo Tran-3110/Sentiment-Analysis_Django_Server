@@ -29,8 +29,6 @@ class SentimentAnalysis(metaclass=Singleton):
     def __perform_model(self, input_data):
         # Tải model
         # Khai báo option cache_dir dùng để lưu model vào thư mục chỉ định (Nặng 500mb 🥲😃). Nếu không thì sẽ lưu vào cache
-        # model = RobertaForSequenceClassification.from_pretrained("wonrax/phobert-base-vietnamese-sentiment", cache_dir='model/model_sa_phobert')
-        # model = RobertaForSequenceClassification.from_pretrained("wonrax/phobert-base-vietnamese-sentiment")
 
         # Tải tokenizer (Xem BERT)
         # tokenizer = AutoTokenizer.from_pretrained("wonrax/phobert-base-vietnamese-sentiment", use_fast=False)
