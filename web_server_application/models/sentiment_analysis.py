@@ -49,13 +49,13 @@ class SentimentAnalysis(metaclass=Singleton):
 
     def perform_sentiment_analysis(self, input_data):
         # Nếu không có sentence
-        if input_data['sentence'] is 'None': return None
+        if input_data['sentence'] == 'None': return None
         # Nếu đã có sentiment và sentence (Không cần thực hiện nữa)
         if input_data['sentiment'] != 'None' and input_data['sentence'] != 'None': return input_data
         return self.__perform_model(input_data)
 
 
-def rating_sentiment(sentiment_result, delta=0.15):
+def rating_sentiment(sentiment_result):
     sentiment_output = sentiment_result[0]
     label = ['negative', 'positive', 'neutral']
 
@@ -66,10 +66,12 @@ def rating_sentiment(sentiment_result, delta=0.15):
     max_rating = sentiment_rating[0]
     mid_rating = sentiment_rating[1]
 
-    if abs(max_rating['rate'] - mid_rating['rate']) > delta:
-        return 'neutral' if max_rating['label'] == 'neutral' else max_rating['label']
-    else:
-        if max_rating['label'] != 'neutral' and mid_rating['label'] != 'neutral':
-            return 'neutral'
-        else:
-            return max_rating['label']
+    # Bỏ phần ngưỡng xác định với các case gần nhau, cho trả về trực tiếp label có tỉ lệ cao nhất
+    # if abs(max_rating['rate'] - mid_rating['rate']) > delta:
+    #     return 'neutral' if max_rating['label'] == 'neutral' else max_rating['label']
+    # else:
+    #     if max_rating['label'] != 'neutral' and mid_rating['label'] != 'neutral':
+    #         return 'neutral'
+    #     else:
+    #         return max_rating['label']
+    return max_rating['label']
